@@ -211,13 +211,15 @@ As the sex of many bird species *can* be identified visually, for the species wh
 
 ![](images/clipboard-3716250105.png)
 
-The script for sounds attempted to retrieve 2 sounds per bird species, with a length under 7 seconds, and with a quality rating of B or higher attached to the sounds metadata. If no sounds were available under 7 seconds then the script would attempt 10 seconds, then 15 seconds, and finally allow for 1 sound at 20 seconds. This was to methodically keep asset size low because of the volume of assets and considering the storage on GitHub alongside the dashboard code.
+The script for sounds attempted to retrieve 2 sounds per bird species, with a length under 7 seconds, and with a quality rating of B or higher within to the sound's metadata. If no sounds were available under 7 seconds then the script would attempt to search for a length of up to 10 seconds, then 15 seconds, and finally allow for 1 sound at 20 seconds. This was to methodically keep asset sizes low because of the volume of assets and considering the storage on GitHub alongside the dashboard code.
 
-Sounds are displayed by selecting the *Sounds* tab and reveal a standard waveform visual with a play button and red line that animates through the waveform as the play-head.
+Sounds are displayed by selecting the *Sounds* tab and reveal a standard waveform visual with a play button and red line that animates through the waveform as the play-head. Underneath each waveform shows a condensed grey-scale spectrogram which has a tool-tip on hover: "Click for full spectrogram", allowing the user to click the UI and expand the spectrogram fully in a separate modal screen.
 
 - @fig-dashboard-sounds The *Sounds* tab of the American Robin - waveform & spectrogram
 
 ![](images/clipboard-1457081906.png)
+
+The spectrogram modal screen shows the fully expanded dynamically calculated spectrogram for the selected species. The modal also displays the source, attributions, and metadata, along with options for grey-scale, viridis, or magma plotting themes with additional option to invert color-scale.
 
 - @fig-dashboard-spectrogram The expanded spectrogram modal for the American Robin
 
