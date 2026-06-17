@@ -189,27 +189,37 @@ Front End Visuals
 
 #### General Information
 
-General species information is displayed through the ***Info*** tab on a simple UI card showing the species name
+Species information is displayed through the toggle from *Map* to *Info* and selecting the *Info* tab from the 3 tab options. On a simple UI card, the scientific name, French name, species family, and species code are displayed in a clean and clear layout with links to 4 additional resources for further literature selectively directed towards the selected species.
+
+Additional links are to: [eBird](https://ebird.org/home), [NatureCounts](https://www.naturecounts.ca/nc/default/main.jsp), [Wikipedia](https://en.wikipedia.org/wiki/Bird), [Xeno-Canto](https://xeno-canto.org/)
 
 - @fig-dashboard-info A basic UI card to display species names, species code, and links.
 
-![](images/clipboard-2530564511.png)
+![](images/clipboard-1656110966.png)
 
 #### Images and Sounds
+
+The images and sounds were obtained through APIs for conservation sites like [Xeno-Canto](https://xeno-canto.org/) and [iNaturalist](https://www.inaturalist.org/). Asset metadata values and tags were utilized to fine tune the download scripts and to refine the desired image and sound parameters. The script for Image downloads attempted to retrieve 10 images per species tagged as a living specimen and aiming for 5 male and 5 female. As about \~3% of images were of poor quality or incorrectly tagged in the metadata manual review and intervention was required for the final quality control of the product. As some bird species are virtually impossible to sex in the field or from an image, the images for these species were binned together in the *All* bucket.
 
 - @fig-dashboard-images-1 The *Images* tab of the Alder Flycatcher - which cannot be sexed
 
 ![](images/clipboard-2083800541.png)
 
+As the sex of many bird species *can* be identified visually, for the species where the sex and relative metadata was manually verified the UI displays 3 bins for *All, Male*, and *Female,* including a check-box to toggle on symbols to subtly label the images with the sexes.
+
 - @fig-dashboard-images-2 The *Images* tab of the Pine Grosbeak with sex labels
 
 ![](images/clipboard-3716250105.png)
+
+The script for sounds attempted to retrieve 2 sounds per bird species, with a length under 7 seconds, and with a quality rating of B or higher attached to the sounds metadata. If no sounds were available under 7 seconds then the script would attempt 10 seconds, then 15 seconds, and finally allow for 1 sound at 20 seconds. This was to methodically keep asset size low because of the volume of assets and considering the storage on GitHub alongside the dashboard code.
+
+Sounds are displayed by selecting the *Sounds* tab and reveal a standard waveform visual with a play button and red line that animates through the waveform as the play-head.
 
 - @fig-dashboard-sounds The *Sounds* tab of the American Robin - waveform & spectrogram
 
 ![](images/clipboard-1457081906.png)
 
-- @fig-dashboard-spectrogram The expanded spectrogram modal forthe American Robin
+- @fig-dashboard-spectrogram The expanded spectrogram modal for the American Robin
 
 ![](images/clipboard-915360303.png)
 
