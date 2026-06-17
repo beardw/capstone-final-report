@@ -52,10 +52,10 @@ To properly address conservation challenges, the tools created should be simple 
 
 High level objectives include:
 
--   Static to dynamic website, changing via user input - maintaining existing figures and visuals.
--   Filters, an interactive map, and additional summaries and visuals.
--   Accommodate historic and future model versions for reproducibility and validation of performance. (Outputs from earlier models have been thoroughly vetted.)
--   Accessible by the general public - serve as a landing page for BAM with links to other existing BAM products and information.
+- Static to dynamic website, changing via user input - maintaining existing figures and visuals.
+- Filters, an interactive map, and additional summaries and visuals.
+- Accommodate historic and future model versions for reproducibility and validation of performance. (Outputs from earlier models have been thoroughly vetted.)
+- Accessible by the general public - serve as a landing page for BAM with links to other existing BAM products and information.
 
 ![Elements of Existing BAM Website](img/BAM-existing-website-visuals.png){#fig-existing-website}
 
@@ -75,9 +75,9 @@ Keeping with a simple and minimalist approach, we've limited the number of filte
 
 The main data scope for the dashboard includes model outputs only. These files are stored on Google Drive and include the following:
 
--   **Raster files** **(TIF format)** - For each bird species, the main output of the model containing 3 bands: mean density, standard deviation of density, and the mean distance of species detection.
--   **Excel files** - Metadata associated with the bird species, region, and importance of the features.
--   **CSV files** - The input to the model, including raw observations binned by Lat/Lon. Used to distinguish between different methods of bird spotting.
+- **Raster files** **(TIF format)** - For each bird species, the main output of the model containing 3 bands: mean density, standard deviation of density, and the mean distance of species detection.
+- **Excel files** - Metadata associated with the bird species, region, and importance of the features.
+- **CSV files** - The input to the model, including raw observations binned by Lat/Lon. Used to distinguish between different methods of bird spotting.
 
 For EDA purposes, a single species of bird, the **Canada Warbler**, was used.
 
@@ -171,7 +171,7 @@ The front end of the dashboard includes the following visuals - there is opportu
 - @fig-dashboard-bar-chart A bar chart showing the population densities by region.
 - @fig-dashboard-static-table A static table containing raw numeric metrics.
 
-::: {#fig-front-end layout-nrow=2}
+::: {#fig-front-end layout-nrow="2"}
 ![Dashboard map visual](img/dashboard-visuals-map.png){#fig-dashboard-map}
 
 ![Dashboard bar chart visual](img/dashboard-visuals-bar-chart.png){#fig-dashboard-bar-chart}
@@ -189,7 +189,29 @@ Front End Visuals
 
 #### General Information
 
+General species information is displayed through the ***Info*** tab on a simple UI card showing the species name
+
+- @fig-dashboard-info A basic UI card to display species names, species code, and links.
+
+![](images/clipboard-2530564511.png)
+
 #### Images and Sounds
+
+- @fig-dashboard-images-1 The *Images* tab of the Alder Flycatcher - which cannot be sexed
+
+![](images/clipboard-2083800541.png)
+
+- @fig-dashboard-images-2 The *Images* tab of the Pine Grosbeak with sex labels
+
+![](images/clipboard-3716250105.png)
+
+- @fig-dashboard-sounds The *Sounds* tab of the American Robin - waveform & spectrogram
+
+![](images/clipboard-1457081906.png)
+
+- @fig-dashboard-spectrogram The expanded spectrogram modal forthe American Robin
+
+![](images/clipboard-915360303.png)
 
 ### Model Results and Exploration
 
@@ -213,16 +235,16 @@ Front End Visuals
 
 **Boreal Avian Modelling Centre**
 
--   Organisation website: <https://borealbirds.github.io/>
--   Google Earth Engine viewer: <https://borealbirds-gee.projects.earthengine.app/view/landbirdmodels>
--   BAM Shiny explorer: <https://borealbirds.shinyapps.io/bam_landbird_explorer/>
--   BAMexploreR R package: <https://github.com/borealbirds/BAMexploreR>
--   Landbird Models V5: <https://github.com/borealbirds/LandbirdModelsV5>
--   BAM website repository: <https://github.com/borealbirds/borealbirds.github.io>
--   Cloud Optimized GeoTIF (COG): <https://cogeo.org/>
--   Coordinate Reference System EPSG lookup: <https://epsg.io/>
+- Organisation website: <https://borealbirds.github.io/>
+- Google Earth Engine viewer: <https://borealbirds-gee.projects.earthengine.app/view/landbirdmodels>
+- BAM Shiny explorer: <https://borealbirds.shinyapps.io/bam_landbird_explorer/>
+- BAMexploreR R package: <https://github.com/borealbirds/BAMexploreR>
+- Landbird Models V5: <https://github.com/borealbirds/LandbirdModelsV5>
+- BAM website repository: <https://github.com/borealbirds/borealbirds.github.io>
+- Cloud Optimized GeoTIF (COG): <https://cogeo.org/>
+- Coordinate Reference System EPSG lookup: <https://epsg.io/>
 
 **Capstone Project Working Repository**
 
--   UBC MDS Boreal-Birds: <https://github.com/UBC-MDS/Boreal-Birds>
--   README: <https://github.com/UBC-MDS/Boreal-Birds/blob/main/README.md>
+- UBC MDS Boreal-Birds: <https://github.com/UBC-MDS/Boreal-Birds>
+- README: <https://github.com/UBC-MDS/Boreal-Birds/blob/main/README.md>
