@@ -10,6 +10,7 @@ format:
     toc-title: Contents
     number-sections: true
     number-depth: 3
+bibliography: references.bib
 ---
 
 \newpage
@@ -293,3 +294,5 @@ And lastly, this is something that BAM is already aware of, relates to the regio
 
 -   UBC MDS Boreal-Birds: <https://github.com/UBC-MDS/Boreal-Birds>
 -   README: <https://github.com/UBC-MDS/Boreal-Birds/blob/main/README.md>
+-   UBC MDS MapTiler: <https://github.com/UBC-MDS/MapTiler>
+-   README: <https://github.com/UBC-MDS/MapTiler/blob/main/README.md>
