@@ -184,6 +184,64 @@ Front End Visuals
 
 \newpage
 
+## Data Architecture and Dynamic Raster Rendering
+
+### Dataset Composition and Scale
+
+The dashboard serves as the visual interface for high-resolution bird population models. These models represent a massive computational effort; they are trained on approximately 1.5 million bird surveys and created by compiling nearly 800,000 individual predictions. To ensure stable performance, the dashboard is designed strictly to visualize these pre-computed model outputs.
+
+The project uses three distinct types of data, each playing a specific role within the application:
+
+* **Spatial Raster Layers (Primary Dataset):** Mean population density estimates modeled across 151 bird species, 3 geographic regions, and 7 years ($1990\sim2020$). This combination creates thousands of individual raster layers that must be managed and rendered on demand.
+* **Tabular Metadata (Excel):** Attributes containing Bird Conservation Region (BCR) definitions, species taxonomy, and overall population estimates. The dashboard reads this file to fill out user-interface filters and show summary statistics.
+* **Environmental Covariates (CSV):** Data showing how individual environmental factors affect population density estimates. These files run the dashboard's interactive charts, letting users explore what drives predicted bird abundance.
+
+All of these data assets are stored remotely on servers managed by the **Digital Research Alliance of Canada (DRAC)**.
+
+### Cloud Optimized GeoTIFFs (COGs)
+
+To handle thousands of high-resolution rasters without downloading the entire dataset locally, the spatial layers are formatted as **Cloud Optimized GeoTIFFs (COGs)** [@cog_website].
+
+A COG is a standard GeoTIFF file that supports efficient, partial data access over the internet using standard HTTP GET range requests. This format avoids forcing a client application to download an entire raster file before it can display any data.
+
+![COG Pyramid Architecture @cog-pyramid](img/cog-pyramid.png){#fig-cog-pyramid}
+
+As shown in @fig-cog-pyramid, COGs rely on two main features to speed up map rendering performance:
+
+1. **Internal Overviews:** The file contains downsampled, lower-resolution versions of the original raster data organized in a pyramid structure. When a user zooms out to a wider view, the map requests a low-resolution overview instead of the raw, heavy pixel grid.
+2. **Dynamic Tiling:** The pixel data is split and stored in discrete, uniform tiles (typically $256 \times 256$ blocks). This layout allows the rendering engine to find and stream only the specific spatial tiles currently visible on the user's dashboard screen.
+
+### Tile Server Evaluation and Infrastructure Selection
+
+While COGs optimize how data is stored, web browsers cannot render raw geospatial data blocks directly. A tile server is required to act as middleware, translating raw pixel values into standard web image tiles on the fly.
+
+During the architecture design phase, two tile-serving solutions were evaluated:
+
+| Criterion | LocalTileServer | TiTiler (Selected) |
+| --- | --- | --- |
+| **Development Environment** | Local development | Cloud-native |
+| **Data Loading** | Requires raster files to be stored locally | Loads remote files directly via HTTP Range requests. |
+| **Project Fit** | **Incompatible:** App stalled when trying to read from remote DRAC storage. | **Ideal:** Built specifically to work smoothly with remote COG web addresses. |
+
+Because our entire raster collection lives on a remote DRAC server, **TiTiler** [@titiler_software] was chosen as our central tile engine.
+
+---
+
+### Map Rendering Workflow with TiTiler
+
+The TiTiler application is built on the FastAPI framework [@fastapi_framework] wrapped in a Shiny application deployed on Posit Connect Cloud using Python.
+
+![TiTiler Workflow](img/titiler-workflow.png){#fig-titiler-workflow}
+
+As illustrated in @fig-titiler-workflow, the frontend dashboard, the DRAC cloud storage, and TiTiler work together in a synchronized pipeline to generate maps on demand:
+
+1. **User Selection:** The user changes a filter on the dashboard UI, selects a specific species, region, and year.
+2. **URL Construction:** The dashboard backend builds the exact HTTP URL for the target COG stored on the DRAC server.
+3. **API Request:** The dashboard sends this COG URL—along with styling choices like color maps and data display ranges—as query parameters to the TiTiler API.
+4. **Remote Byte Extraction:** TiTiler sends HTTP range requests to the DRAC server. It reads only the specific byte sections for the tiles and overview levels needed for the user's current zoom level and view.
+5. **Dynamic Tiling:** TiTiler processes the raw data bytes, applies the chosen color map, and converts the data into standard web map image tiles (such as PNG or WebP format).
+6. **Map Display:** The dashboard's map client (`ipyleaflet` / Leaflet) receives the tile URL from TiTiler, updating the map smoothly as the user pans or zooms.
+
 Hosted on Posit Connect Cloud
 
 ## Data Product and Results
@@ -232,9 +290,6 @@ The spectrogram modal screen shows the fully expanded dynamically calculated spe
 
 #### Map
 
-
-#### Map #2
-
 BAM's model produces raster data on predicted estimates. There current website only allowed the user to view a static map image of these. There was no option to zoom in and pan around. The BCR boundaries were only available through the 'Methods' page and not layered directly onto the map. Additionally, with the introduction of Landbirds v5, the number of BCRs increased with the introduction of mosaics that included Alaska and the Lower 48 areas. These all needed to be displayed and filtered in more interactive way than the current site allowed. 
 
 Our dashboard eliminated most of what the static site lacked. Rather than having to navigate to a separate species page, the user is able to stay on one page to explore the map details of the species, region, and year they are interested in. This enhances usability.
@@ -242,6 +297,16 @@ Our dashboard eliminated most of what the static site lacked. Rather than having
 We also wanted the map to be more dynamic and interactive than before. We included different zoom capabilities, map scale, and a dynamic legend. The boundaries also included a hover-to-outline feature to further identify what BCR a user was looking at. 
 
 It was also noted at a BAM meeting, that different basemaps were prefered by different users. To address this, our default basemap is Open Street Map, but we provided Positron for a more minimal look and World Imagery for those who would also like to display satellite details. Additional toggles allows the user to turn the mean density and boundaries on and off, depending on the view they are interested in exploring.
+
+##### Interactive Map Features
+
+To complement the dynamic raster tile pipeline, the interactive map layer includes several user-experience and navigation features implemented via the client-side mapping interface:
+
+* **Dynamic BCR Highlighting**: When a user hovers the cursor over a Bird Conservation Region (BCR) boundary, the map dynamically highlights the region's border to provide immediate visual feedback. Simultaneously, the specific name of the hovered BCR is displayed in an information overlay positioned in the bottom-left corner of the map.
+* **Contextual Navigation**: Clicking directly on a BCR triggers an automated event that centers the map and adjusts the zoom level to fit the selected region's boundaries, allowing for quick, localized data exploration.
+* **Global Reset**: A dedicated "Reset Zoom" control button is available on the map interface. Clicking this returns the viewport back to the initial, full-scale geographic boundary of the study area.
+* **Basemap Toggling**: The map interface supports multiple basemaps (e.g., satellite imagery, topographic maps, and minimalist terrain backgrounds). Users can toggle between these choices at any time to improve data contrast and visibility.
+* **Automated Legend Generation**: The map legend is dynamically calculated using TiTiler's statistical analysis endpoints (/statistics). When a user updates the species or region filters, the dashboard queries TiTiler to get the exact data distribution (minimum, maximum, and percentiles) of the underlying remote COG file. The application uses these real-time metrics to calculate color scales and update the legend values on the map.
 
 #### Population and Density Estimates
 
