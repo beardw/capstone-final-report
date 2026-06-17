@@ -195,7 +195,7 @@ Additional links are to: [eBird](https://ebird.org/home), [NatureCounts](https:/
 
 - @fig-dashboard-info A basic UI card to display species names, species code, and links.
 
-![](images/clipboard-1656110966.png)
+![](img/dashboard-info-card.png)
 
 #### Images and Sounds
 
@@ -203,13 +203,13 @@ The images and sounds were obtained through APIs for conservation sites like [Xe
 
 - @fig-dashboard-images-1 The *Images* tab of the Alder Flycatcher - which cannot be sexed
 
-![](images/clipboard-2083800541.png)
+![](img/dashboard-images-1.png)
 
 As the sex of many bird species *can* be identified visually, for the species where the sex and relative metadata was manually verified the UI displays 3 bins for *All, Male*, and *Female,* including a check-box to toggle on symbols to subtly label the images with the sexes.
 
 - @fig-dashboard-images-2 The *Images* tab of the Pine Grosbeak with sex labels
 
-![](images/clipboard-3716250105.png)
+![](img/dashboard-images-2.png)
 
 The script for sounds attempted to retrieve 2 sounds per bird species, with a length under 7 seconds, and with a quality rating of B or higher within to the sound's metadata. If no sounds were available under 7 seconds then the script would attempt to search for a length of up to 10 seconds, then 15 seconds, and finally allow for 1 sound at 20 seconds. This was to methodically keep asset sizes low because of the volume of assets and considering the storage on GitHub alongside the dashboard code.
 
@@ -217,13 +217,13 @@ Sounds are displayed by selecting the *Sounds* tab and reveal a standard wavefor
 
 - @fig-dashboard-sounds The *Sounds* tab of the American Robin - waveform & spectrogram
 
-![](images/clipboard-1457081906.png)
+![](img/dashboard-sounds-waveform.png)
 
 The spectrogram modal screen shows the fully expanded dynamically calculated spectrogram for the selected species. The modal also displays the source, attributions, and metadata, along with options for grey-scale, viridis, or magma plotting themes with additional option to invert color-scale.
 
 - @fig-dashboard-spectrogram The expanded spectrogram modal for the American Robin
 
-![](images/clipboard-915360303.png)
+![](img/dashboard-sounds-spectrogram.png)
 
 ### Model Results and Exploration
 
