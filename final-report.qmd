@@ -53,10 +53,10 @@ To properly address conservation challenges, the tools created should be simple 
 
 High level objectives include:
 
--   Static to dynamic website, changing via user input - maintaining existing figures and visuals.
--   Filters, an interactive map, and additional summaries and visuals.
--   Accommodate historic and future model versions for reproducibility and validation of performance. (Outputs from earlier models have been thoroughly vetted.)
--   Accessible by the general public - serve as a landing page for BAM with links to other existing BAM products and information.
+- Static to dynamic website, changing via user input - maintaining existing figures and visuals.
+- Filters, an interactive map, and additional summaries and visuals.
+- Accommodate historic and future model versions for reproducibility and validation of performance. (Outputs from earlier models have been thoroughly vetted.)
+- Accessible by the general public - serve as a landing page for BAM with links to other existing BAM products and information.
 
 ![Elements of Existing BAM Website](img/BAM-existing-website-visuals.png){#fig-existing-website}
 
@@ -76,9 +76,9 @@ Keeping with a simple and minimalist approach, we've limited the number of filte
 
 The main data scope for the dashboard includes model outputs only. These files are stored on Google Drive and include the following:
 
--   **Raster files** **(TIF format)** - For each bird species, the main output of the model containing 3 bands: mean density, standard deviation of density, and the mean distance of species detection.
--   **Excel files** - Metadata associated with the bird species, region, and importance of the features.
--   **CSV files** - The input to the model, including raw observations binned by Lat/Lon. Used to distinguish between different methods of bird spotting.
+- **Raster files** **(TIF format)** - For each bird species, the main output of the model containing 3 bands: mean density, standard deviation of density, and the mean distance of species detection.
+- **Excel files** - Metadata associated with the bird species, region, and importance of the features.
+- **CSV files** - The input to the model, including raw observations binned by Lat/Lon. Used to distinguish between different methods of bird spotting.
 
 For EDA purposes, a single species of bird, the **Canada Warbler**, was used.
 
@@ -172,7 +172,7 @@ The front end of the dashboard includes the following visuals - there is opportu
 - @fig-dashboard-bar-chart A bar chart showing the population densities by region.
 - @fig-dashboard-static-table A static table containing raw numeric metrics.
 
-::: {#fig-front-end layout-nrow=2}
+::: {#fig-front-end layout-nrow="2"}
 ![Dashboard map visual](img/dashboard-visuals-map.png){#fig-dashboard-map}
 
 ![Dashboard bar chart visual](img/dashboard-visuals-bar-chart.png){#fig-dashboard-bar-chart}
@@ -192,7 +192,41 @@ Hosted on Posit Connect Cloud
 
 #### General Information
 
+Species information is displayed through the toggle from *Map* to *Info* and selecting the *Info* tab from the 3 tab options. On a simple UI card, the scientific name, French name, species family, and species code are displayed in a clean and clear layout with links to 4 additional resources for further literature selectively directed towards the selected species.
+
+Additional links are to: [eBird](https://ebird.org/home), [NatureCounts](https://www.naturecounts.ca/nc/default/main.jsp), [Wikipedia](https://en.wikipedia.org/wiki/Bird), [Xeno-Canto](https://xeno-canto.org/)
+
+- @fig-dashboard-info A basic UI card to display species names, species code, and links.
+
+![](img/dashboard-info-card.png)
+
 #### Images and Sounds
+
+The images and sounds were obtained through APIs for conservation sites like [Xeno-Canto](https://xeno-canto.org/) and [iNaturalist](https://www.inaturalist.org/). Asset metadata values and tags were utilized to fine tune the download scripts and to refine the desired image and sound parameters. The script for Image downloads attempted to retrieve 10 images per species tagged as a living specimen and aiming for 5 male and 5 female. As about \~3% of images were of poor quality or incorrectly tagged in the metadata manual review and intervention was required for the final quality control of the product. As some bird species are virtually impossible to sex in the field or from an image, the images for these species were binned together in the *All* bucket.
+
+- @fig-dashboard-images-1 The *Images* tab of the Alder Flycatcher - which cannot be sexed
+
+![](img/dashboard-images-1.png)
+
+As the sex of many bird species *can* be identified visually, for the species where the sex and relative metadata was manually verified the UI displays 3 bins for *All, Male*, and *Female,* including a check-box to toggle on symbols to subtly label the images with the sexes.
+
+- @fig-dashboard-images-2 The *Images* tab of the Pine Grosbeak with sex labels
+
+![](img/dashboard-images-2.png)
+
+The script for sounds attempted to retrieve 2 sounds per bird species, with a length under 7 seconds, and with a quality rating of B or higher within to the sound's metadata. If no sounds were available under 7 seconds then the script would attempt to search for a length of up to 10 seconds, then 15 seconds, and finally allow for 1 sound at 20 seconds. This was to methodically keep asset sizes low because of the volume of assets and considering the storage on GitHub alongside the dashboard code.
+
+Sounds are displayed by selecting the *Sounds* tab and reveal a standard waveform visual with a play button and red line that animates through the waveform as the play-head. Underneath each waveform shows a condensed grey-scale spectrogram which has a tool-tip on hover: "Click for full spectrogram", allowing the user to click the UI and expand the spectrogram fully in a separate modal screen.
+
+- @fig-dashboard-sounds The *Sounds* tab of the American Robin - waveform & spectrogram
+
+![](img/dashboard-sounds-waveform.png)
+
+The spectrogram modal screen shows the fully expanded dynamically calculated spectrogram for the selected species. The modal also displays the source, attributions, and metadata, along with options for grey-scale, viridis, or magma plotting themes with additional option to invert color-scale.
+
+- @fig-dashboard-spectrogram The expanded spectrogram modal for the American Robin
+
+![](img/dashboard-sounds-spectrogram.png)
 
 ### Model Results and Exploration
 
@@ -281,14 +315,14 @@ And lastly, this is something that BAM is already aware of, relates to the regio
 
 **Boreal Avian Modelling Centre**
 
--   Organisation website: <https://borealbirds.github.io/>
--   Google Earth Engine viewer: <https://borealbirds-gee.projects.earthengine.app/view/landbirdmodels>
--   BAM Shiny explorer: <https://borealbirds.shinyapps.io/bam_landbird_explorer/>
--   BAMexploreR R package: <https://github.com/borealbirds/BAMexploreR>
--   Landbird Models V5: <https://github.com/borealbirds/LandbirdModelsV5>
--   BAM website repository: <https://github.com/borealbirds/borealbirds.github.io>
--   Cloud Optimized GeoTIF (COG): <https://cogeo.org/>
--   Coordinate Reference System EPSG lookup: <https://epsg.io/>
+- Organisation website: <https://borealbirds.github.io/>
+- Google Earth Engine viewer: <https://borealbirds-gee.projects.earthengine.app/view/landbirdmodels>
+- BAM Shiny explorer: <https://borealbirds.shinyapps.io/bam_landbird_explorer/>
+- BAMexploreR R package: <https://github.com/borealbirds/BAMexploreR>
+- Landbird Models V5: <https://github.com/borealbirds/LandbirdModelsV5>
+- BAM website repository: <https://github.com/borealbirds/borealbirds.github.io>
+- Cloud Optimized GeoTIF (COG): <https://cogeo.org/>
+- Coordinate Reference System EPSG lookup: <https://epsg.io/>
 
 **Capstone Project Working Repository**
 
