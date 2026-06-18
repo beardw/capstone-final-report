@@ -17,7 +17,7 @@ bibliography: references.bib
 
 ## Executive Summary
 
-The Boreal Avian Modelling Centre (BAM) required a transition from static visuals to a high-fidelity, interactive, analytic platform. The current [site](https://borealbirds.github.io/ "BAM static website"), which showcases Landbird version 4 (V4) model results, is restricted to data tables and static summaries for 143 species of birds across boreal North America. Landbird version 5 (V5) model results introduced improved raster predictions, spatially explicit density estimates, and habitat relationship metrics. We took these improvements and included them on a fully new dashboard.
+The Boreal Avian Modelling Centre (BAM) required a transition from static visuals to a high-fidelity, interactive, analytic platform. The previous [site](https://borealbirds.github.io/ "BAM static website"), which showcases Landbird version 4 (V4) model results, is restricted to data tables and static summaries for 143 species of birds across boreal North America. Landbird version 5 (V5) model results introduced improved raster predictions, spatially explicit density estimates, and habitat relationship metrics. We took these improvements and included them on a fully new dashboard.
 
 We designed the dashboard to be user-friendly and accessible to a wide range of audiences including research and conservationist-based users, as well as birding enthusiasts and the general public. It allows the user to interactively explore Landbird V5 model outputs while linking back to V4 for historical purposes. As well as serving as a landing page for visitors, the dashboard provides easy-access to the existing tools and methods in the BAM portfolio.
 
@@ -62,9 +62,9 @@ High level objectives include:
 
 ### The Product
 
-The final deliverable will be an interactive dashboard allowing users to explore outputs of models v4, v5, and ongoing. We will be meeting with BAM regularly to include or exclude features discussed. @fig-dashboard-features showcases elements of the proposed dashboard.
+The final deliverable is an interactive dashboard allowing users to explore outputs of models v4, v5, and ongoing. In an effort to maintain CI/CD, the elements of the dashboard have been modularized and future-proofed to enable simple plug-and-play when new models are created by BAM. @fig-dashboard-features showcases the landing page and elements of the proposed dashboard.
 
-Keeping with a simple and minimalist approach, we've limited the number of filters and visuals to the most important. Additional components can be housed under tabs reducing scrolling by collating related information together, making searching and navigation more intuitive.
+Keeping with a simple and minimalist approach, we've limited the number of filters and visuals to the most important. Additional components are housed under tabs reducing scrolling by collating related information together, making searching and navigation more intuitive.
 
 ![Features of the dashboard highlighted](img/dashboard-features-hghlighted.png){#fig-dashboard-features}
 
@@ -145,13 +145,12 @@ Currently, these files are stored on a Google Drive which are subjected to exten
 
 #### Preprocessing
 
-There is different preprocessing required for both outlined data streams. Since we're dealing with discrete model outputs, the data format can be safely assumed to be standardized.
+The preprocessing step has been moved upstream and is conducted once. The preprocecssing includes -
 
-Before loading the data to the app, we perform some data validation checks on the metadata: column name validation, data type validation, and NaN management.
-
-Preprocessing for TIF files include: color band extraction, CRS validation, and conversion to Cloud Optimized GeoTIF (COG); or equivalent alternatives.
-
-Our plan is to run these preprocessing steps in advance such that it is ready to be ingested into the dashboard at runtime.
+- conversion of raster files to appropriate CRS projection,
+- conversion of raster files to COG,
+- validating metadata,
+- validating and aggregating GAM model outputs.
 
 #### App
 
@@ -322,6 +321,20 @@ Using the Altair package helped us address this issue relatively simply, as its 
 We didn't simply leave off the population and density estimates from the dashboard; there are potential user who may find a table of use. To address this need, we created a dynamically-filtered table of these values and the ability to download them in an additional location on the dashboard.  
 
 #### Covariates
+
+BAM requested the creation of a visual to track the inner workings of the population prediction model. To address this, we created a UI element to measure the marginal effects of the covariates against the model predictions. Each model input variable (covariate) was fitted with a Generalized Additive Model (GAM), against the model predictions, to measure its isolated effect. 
+
+![placeholder figure]
+
+The chart shows the marginal effect of the selected covariate (Annual Precipitation) against the model population prediction, for the selected bird species (Alder Flycatcher). We can infer from this simple chart that higher values of annual rainfall in the region `can40` are associated with lower predicted population density for the Alder Flycatcher, holding all other variables constant.
+
+The chart can be dynamically filtered for each covariate and bird species in the model. The available options for BCR change dynamically based on whether the data exists. For example, the Alder Flycatcher is unlikely to be found in the region `usa4`, hence this option does not show up. Multiple BCR's can be selected to view how the covariate affects the predictions across regions.
+
+The table in the bottom left corner shows the highest influencing covariates and regions for a selected bird species. This was calculated using the `importance` score outputted directly from the model.
+
+![plcaeholder figure]
+
+The GAM experiments were conducted for each bird species and BCR region in the dataset, resulting in a lot of data. This meant that server-side processing was out of the question. To address this, the team decided to move the data processing upstream, and save the model output results to the existing DRAC server. On load, the dashboard requests the user filtered data from the server and swaps it out as the user changes the filter. This is done to prevent memory overflow, while still maintaining a smooth user experience and feel.
 
 #### Download
 
