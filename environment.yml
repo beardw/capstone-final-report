@@ -1,0 +1,8 @@
+name: capstone
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - matplotlib=3.11.0 
+  - quarto=1.9.38
+  - quartodoc=0.11.1
