@@ -1,15 +1,15 @@
 ---
-title: "Boreal Birds Dashboard Proposal Report"
-author: "Wesley Beard, Harrison Li, Joel Peterson, Suryash Chakravarty"
+title: "Boreal Birds Dashboard Final Report"
+author: "Wesley Beard, Harrison Li, Joel Nicholas Peterson, Suryash Chakravarty"
 date: "2026-06-17"
-# format:
-#   pdf
-    # fig-pos: "H"
-    # toc: true
-    # toc-depth: 3
-    # toc-title: Contents
-    # number-sections: true
-    # number-depth: 3
+format:
+  pdf:
+    fig-pos: "H"
+    toc: true
+    toc-depth: 3
+    toc-title: Contents
+    number-sections: true
+    number-depth: 3
 bibliography: references.bib
 ---
 
@@ -21,24 +21,27 @@ The Boreal Avian Modelling Centre (BAM) required a transition from static visual
 
 We designed the dashboard to be user-friendly and accessible to a wide range of audiences including research and conservationist-based users, as well as birding enthusiasts and the general public. It allows the user to interactively explore Landbird V5 model outputs while linking back to V4 for historical purposes. The dashboard provides easy-access to the existing tools and methods in the BAM portfolio.
 
-@fig-v5-main-page showcases the final layout of the V5 model dashboard. We've included filters, an interactive map, several charts, and download capabilities.
+@fig-v5-main-page showcases the final layout of the V5 model page on the dashboard. We've included filters, an interactive map, several charts, and download capabilities.
 
 ![Dashboard Landbird V5 Main Page](img/dashboard-main-model.png){#fig-v5-main-page}
 
+\newpage
+
 ## Introduction
 
-The project motivation is to improve upon and enhance the current static Boreal Avian Modelling Centre (BAM) website. @fig-existing-website provides elements from the current BAM website.
+The project motivation was to improve the current static landbird V4 Boreal Avian Modelling Centre (BAM) website @fig-existing-website.
 
 ![Elements of Existing BAM Website](img/BAM-existing-website-visuals.png){#fig-existing-website}
 
-In collaboration with BAM, the following high level objectives were established:
+In collaboration with BAM, the following high level objectives were achieved:
 
-- Static to dynamic website, changing via user input - maintaining existing figures and visuals.
-- Filters, an interactive map, and additional summaries and visuals.
-- Accommodate historic and future model versions for reproducibility and validation of performance. (Outputs from earlier models have been thoroughly vetted.)
-- Accessible by the general public - serve as a landing page for BAM with links to other existing BAM products and information.
+- Static website to dynamic dashboard, while maintaining and enhancing existing figures and visuals.
+- Key filters, an interactive map, and population, density, and covariate summaries.
+- Downloadable results and links to existing BAM products.
+- Additional information related to each species including images, and sounds. 
+- Accessible to the general public and scientific community.
 
-In addition to these basic UI elements, BAM gave us creative freedom to explore additional features as needed.
+\newpage
 
 ## Data
 
@@ -48,7 +51,7 @@ The dashboard serves as the visual interface for high-resolution bird population
 
 The project uses three distinct types of data, each playing a specific role within the application:
 
-* **Spatial Raster Layers (Primary Dataset):** Mean population density estimates modeled across 151 bird species, 3 geographic regions, and 7 years ($1990\sim2020$). This combination creates thousands of individual raster layers that must be managed and rendered on demand.
+* **Spatial Raster Layers (Primary Dataset):** Mean population density estimates modeled across a growing number of bird species, 3 geographic regions, and 7 years ($1990\sim2020$). This combination creates thousands of individual raster layers that must be managed and rendered on demand.
 * **Tabular Metadata (Excel):** Attributes containing Bird Conservation Region (BCR) definitions, species taxonomy, and overall population estimates. The dashboard reads this file to fill out user-interface filters and show summary statistics.
 * **Environmental Covariates (CSV):** Data showing how individual environmental factors affect population density estimates. These files run the dashboard's interactive charts, letting users explore what drives predicted bird abundance.
 
@@ -75,7 +78,7 @@ As shown in @fig-cog-pyramid, COGs rely on two main features to speed up map ren
 
 While COGs optimize how data is stored, web browsers cannot render raw geospatial data blocks directly. A tile server is required to act as middleware, translating raw pixel values into standard web image tiles on the fly.
 
-During the architecture design phase, two tile-serving solutions were evaluated:
+During the architecture design phase, two tile-serving solutions were evaluated (@tbl-tile).
 
 | Criterion | LocalTileServer | TiTiler (Selected) |
 | --- | --- | --- |
@@ -83,9 +86,11 @@ During the architecture design phase, two tile-serving solutions were evaluated:
 | **Data Loading** | Requires raster files to be stored locally | Loads remote files directly via HTTP Range requests. |
 | **Project Fit** | **Incompatible:** App stalled when trying to read from remote DRAC storage. | **Ideal:** Built specifically to work smoothly with remote COG web addresses. |
 
+: Tiling Options {#tbl-tile}
+
 Because our entire raster collection lives on a remote DRAC server, **TiTiler** [@titiler_software] was chosen as our central tile engine.
 
----
+\newpage
 
 ### Map Rendering Workflow with TiTiler
 
@@ -102,21 +107,13 @@ As illustrated in @fig-titiler-workflow, the frontend dashboard, the DRAC cloud 
 5. **Dynamic Tiling:** TiTiler processes the raw data bytes, applies the chosen color map, and converts the data into standard web map image tiles (such as PNG or WebP format).
 6. **Map Display:** The dashboard's map client (`ipyleaflet` / Leaflet) receives the tile URL from TiTiler, updating the map smoothly as the user pans or zooms.
 
-### Data Pipeline
-
-@fig-data-pipeline maps out our main pipeline for the dashboard. Following is a breakdown of the individual components of the pipeline.
-
-![Main data pipeline for the dashboard](img/main-data-pipeline.png){#fig-data-pipeline}
-
 \newpage
 
 ## Data Product and Results
 
-Keeping with a simple and minimalist approach, we've limited the number of filters and visuals to the most important. Additional components are housed under tabs reducing scrolling by collating related information together, making searching and navigation more intuitive.
+Keeping with a simple and minimalist approach, we limited the number of filters and visuals to the most important. Additional components are housed under tabs, reducing scrolling by collating related information together and making searching and navigation more intuitive.
 
 ![Features of the dashboard highlighted](img/dashboard-features-hghlighted.png){#fig-dashboard-features}
-
-Here, we elaborate on some key features.
 
 ### Bird Species Details
 
@@ -128,7 +125,7 @@ Additional links are to: [@eBird], [@NatureCounts], [Wikipedia](https://en.wikip
 
 - @fig-dashboard-info A basic UI card to display species names, species code, and links.
 
-![Basic Layout of Dashboard Info Card](img/dashboard-info-card.png)
+![Basic Layout of Dashboard Info Card](img/dashboard-info-card.png){#fig-dashboard-info}
 
 #### Images and Sounds
 
@@ -136,11 +133,11 @@ The images and sounds were obtained through APIs for conservation sites like [@X
 
 - @fig-dashboard-images-1 The *Images* tab of the Alder Flycatcher - which cannot be sexed
 
-![Bird Metadata - Pictures - 1](img/dashboard-images-1.png)
+![Bird Metadata - Pictures - 1](img/dashboard-images-1.png){#fig-dashboard-images-1}
 
 - @fig-dashboard-images-2 The *Images* tab of the Pine Grosbeak with sex labels
 
-![Bird Metadata - Pictures - 2](img/dashboard-images-2.png)
+![Bird Metadata - Pictures - 2](img/dashboard-images-2.png){#fig-dashboard-images-2}
 
 The script for sounds attempted to retrieve 2 sounds per bird species, with a length under 7 seconds, and with a quality rating of B or higher. If no sounds were available under 7 seconds, the script would attempt to search for a length of up to 10 seconds, then 15 seconds, and finally allow for 1 sound at 20 seconds. This was done to methodically keep asset sizes low, considering the storage on GitHub alongside the dashboard code.
 
@@ -148,13 +145,13 @@ Sounds are displayed by selecting the *Sounds* tab and reveal a standard wavefor
 
 - @fig-dashboard-sounds The *Sounds* tab of the American Robin - waveform & spectrogram
 
-![Bird metadata - sound waveform](img/dashboard-sounds-waveform.png)
+![Bird metadata - sound waveform](img/dashboard-sounds-waveform.png){#fig-dashboard-sounds}
 
 The spectrogram modal screen shows the fully expanded dynamic spectrogram for the selected species. The modal also displays the source, attributions, and metadata, along with options for grey-scale, viridis, or magma plotting themes with additional option to invert color-scale.
 
 - @fig-dashboard-spectrogram The expanded spectrogram modal for the American Robin
 
-![Bird metadata - sounds spectrogram](img/dashboard-sounds-spectrogram.png)
+![Bird metadata - sounds spectrogram](img/dashboard-sounds-spectrogram.png){#fig-dashboard-spectrogram}
 
 ### Model Results and Exploration
 
@@ -170,19 +167,53 @@ The interactive map layer includes several user-experience and navigation featur
 * **Contextual Navigation**: Clicking directly on a BCR triggers an automated event that centers the map and adjusts the zoom level to fit the selected region's boundaries, allowing for quick, localized data exploration.
 * **Global Reset**: A dedicated "Reset Zoom" control button is available on the map interface. Clicking this returns the viewport back to the initial, full-scale geographic boundary of the study area.
 * **Basemap Toggling**: The map interface supports multiple basemaps (e.g., satellite imagery, topographic maps, and minimalist terrain backgrounds). Users can toggle between these choices at any time to improve data contrast and visibility.
-* **Automated Legend Generation**: The map legend is dynamically calculated using TiTiler's statistical analysis endpoints (/statistics). When a user updates the species or region filters, the dashboard queries TiTiler to get the exact data distribution (minimum, maximum, and percentiles) of the underlying remote COG file. The application uses these real-time metrics to calculate color scales and update the legend values on the map.
+* **Automated Legend Generation**: The map legend is dynamically calculated using TiTiler's statistical analysis endpoints. When a user updates the species or region filters, the dashboard queries TiTiler to get the exact data distribution (minimum, maximum, and percentiles) of the underlying remote COG file. The application uses these real-time metrics to calculate color scales and update the legend values on the map.
 
 #### Population and Density Estimates
 
-The next element of the dashboard looked at the mean population and density estimates, generated by the model, for each BCR. Using the plotting package, Altair, the point estimate of the mean population densities were plotted on a simple bar chart. Subsequently, layering this with 5th and 95th percentile intervals provided the much needed visual cues as which ranges where wider than others. @fig-density-visual shows what this element looks like.
+The next element of the dashboard looked at the mean population and density estimates, generated by the model, for each BCR. Initially, displayed as a table on BAM's V4 website, a basic plot (@fig-population-estimates) showed us that we could greatly improve upon how these results were being displayed to the user. 
+
+```{python}
+#| label: fig-population-estimates
+#| fig-cap: "Regional and BCR population estimates for the Alder Flycatcher"
+#| echo: false
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("data/alfl-estimate-results.csv")
+df = df.sort_values("population_estimate")
+
+fig, ax = plt.subplots(figsize=(8, 8))
+
+ax.scatter(
+    df["population_estimate"],
+    df["region"],
+    s=40
+)
+
+ax.set_xscale("symlog")
+ax.set_xlabel("Abundance (M males)")
+
+ax.set_ylabel("")
+
+ax.set_title(
+    "Regional and BCR Population Estimates for the Alder Flycatcher\n"
+    "Intervals represent 5th and 95th percentile of the bootstrap distribution",
+    pad=15
+)
+
+plt.tight_layout()
+plt.show()
+```
+
+In the final dashboard, we used the plotting package, Altair, to visualize the mean population and density estimates. We layered this with their 5th and 95th percentile intervals. This provided the much needed visual cues as to which estimates were greater and which ranges where wider. @fig-density-visual illustrates the final state.
 
 ![Dashboard UI - Density chart](img/dashboard-ui-density.png){#fig-density-visual}
 
-Using the Altair package helped us address this issue relatively simply, as its documentation is straightforward and accessible should the charts need to be updated, changed, or new ones developed.  
-
 #### Covariates
 
-BAM requested the creation of a visual to track the inner workings of the population prediction model. To address this, we created a UI element to measure the marginal effects of the covariates against the model predictions. Each model input variable (covariate) was fitted with a Generalized Additive Model (GAM), against the model predictions, to measure its isolated effect. @fig-covariates-visual shows this UI element.
+BAM requested the creation of a visual to track the inner workings of the population prediction model. To address this, we created a UI element to visualize the marginal effects of the covariates against the model predictions. Each model input variable (covariate) was fitted with a Generalized Additive Model (GAM), against the model predictions, to measure its isolated effect. (These results were provided to us by BAM.) @fig-covariates-visual shows this UI element.
 
 ![Dashboard UI - Covariates](img/covariates-visual.png){#fig-covariates-visual}
 
@@ -190,68 +221,66 @@ The chart can be dynamically filtered for each covariate and bird species in the
 
 #### Download
 
-Our next UI component involves getting the model results into the user’s own hands. Being fortunate to have public results, downloading capabilities was a must for the dashboard. Althought the original BAM website provided the ability to download all the results, it lacked the capability to apply filters. 
+Our next UI component involves getting the model results into the user’s own hands. Being fortunate to have public results, downloading capabilities was a must for the dashboard. Although the original BAM website provided the ability to download all the results, it lacked the capability to apply filters. 
 
-Our current dashboard provides two ways of downloading the model results: all species results and those results based on the applied filter. As well as the population and density estimates; the user can also download species taxonomy, model metadata, and additional information on the model regions and variables themselves. 
+Our current dashboard provides two ways of downloading the model results: all species results and those results based on the applied filter @fig-download. As well as the population and density estimates; the user can also download species taxonomy, model metadata, and additional information on the model regions and variables themselves. 
 
-![Dashboard UI - Download](img/dashboard-ui-download.png){@fig-download}
+![Dashboard UI - Download](img/dashboard-ui-download.png){#fig-download}
 
-Housed all in one download tab, this makes it much easier for users to access what they are looking for and only requires updating the filters to retrieve another species data (should that be the desire over all). Achieved our goal to be simple and clear.
+Achieving our goal to be simple and clear, being located in one download tab, this makes it much easier for users to access what they are looking for and only requires updating the filters to retrieve another species data. 
 
 ### Text-Heavy Elements
 
 Here we shift away from model results and focus on the communication aspect of the project. With BAM being an organization that spans national boundaries, and including international outputs, organizing and displaying the text-heavy communication elements of the project was deemed of high importance.
 
-Our main considerations can be seen in the culmination of the "Welcome," "Model Access," and "Methods" pages, each conataining text related to purpose, method explanations, citations, accessing additional model products, and more. The goal here was to create a backend that could be easily updated and understood by anyone who would be maintaining the communication and documentation related to the dashboard.
+Our main considerations can be seen in the culmination of the "Welcome," "Model Access," and "Methods" pages, each conataining text related to purpose, method explanations, citations, accessing additional model products, and more @fig-text-heavy. Primarily, the goal, here, was to create a backend that could be easily updated and understood by anyone who would be maintaining the communication and documentation related to the dashboard. Secondly, we also chose to use markdown format for all of the text-heavy elements. This allowed for simple formatting and markdown's inherent syntax to be used.
 
 To address this, we housed everything in a 'contents' directory, eliminating the need for several locations to be edited each time. This way if information did need to be diplayed in multiple locations, only one file need be referenced and maintained.
 
-![Dashboard UI - Welcome Page](img/dashboard-ui-text-welcome.png){@fig-welcome width=70%}
+::: {#fig-text-heavy layout-ncol="1"}
+![Dashboard UI - Welcome Page](img/dashboard-ui-text-welcome.png){#fig-welcome}
 
-![Dashboard UI - Model Access Page](img/dashboard-ui-text-methods.png){@fig-model-access width=70%}
+![Dashboard UI - Model Access Page](img/dashboard-ui-text-methods.png){#fig-model-access}
 
-There were also a couple other reasons we chose this method. Firstly, moving this text outside of the main dashboard codebase made for reading, editing, and understanding much easier. And secondly, we also chose to use markdown format for all of the text-heavy elements. This allowed for simple formatting and markdown's inherent syntax to be used.
+Text-heavy page elements
+:::
 
 ### Alternative Approaches and Future Improvements
 
 After working through the project and discussing ideas with the partners, there are a couple of future improvements that we would have liked to tackle given a longer timeframe.
 
-Multi-select support: Currently, the main model page does not permit multi-select of species: only one species and details can be viewed at a time. 
-
-French-language support: The existing dashboard only outputs in EN language. Given the large presence of BAM in Quebec, adding FR language support would be beneficial.
-
-Hosting: The dashboard currently is hosted on Posit Cloud. While this provides a lightweight viewing experience, moving this over to a better hosting service may be useful as the data scales.
-
-\newpage
+- **Multi-select support:** Currently, the main V5 model page does not permit multi-select of species: only one species and details can be viewed at a time. 
+- **French-language support:** The existing dashboard is English-based. Given the national scope of BAM, adding French language support would be beneficial.
+- **Hosting:** The dashboard currently is hosted on Posit Connect Cloud. While this provides a lightweight viewing experience, moving this over to a better hosting service may be useful as the data scales.
 
 ## Conclusions and Recommendations
 
-At the outset of the project, we aimed to improve the accessibility and reach of BAM's Boreal Bird Species Results through a new and comprehensive interactive dashboard. We took what was a static website, with minimal charts and interactive components, and created a data product that more than exceeded our expectations. 
+At the outset of the project, we aimed to improve the accessibility and reach of BAM's Boreal Bird Species Results through a new and comprehensive interactive dashboard. We took what was a static website, with minimal charts and interactive components, and created a data product that has more than exceeded our expectations. 
 
-As we handover the project, there are few comments and recommendations we'd like to make. Firstly, each species has images and sounds. Having the framework and structure in place, adding more curated media components could elevate this aspect of the dashboard. 
+As we handover the project, there are few comments and recommendations we'd like to make. Firstly, each species has images and sounds. Having the framework and structure in place, adding more curated media components could elevate this aspect of the dashboard. Secondly, hosting the Titiler service on their own servers could see added improvements. We've provided troubleshooting documentation, however, subsequent dashboard development in this area could be beneficial.
 
-Secondly, hosting the Titiler service on their own servers could see added improvements.
-
-And lastly, this is something that BAM is already aware of, relates to the regions. It would be fantastic to be able to display all regions on the map at once. Understandably it would take some effort to make the model results line up near the geographical borders, we believe this would be valuable for users wanting to display all results as well. This would also be helpful should future models be expanded to include additional regions.
+And lastly, and something that BAM is already aware of, relates to the regions. It would be fantastic to be able to display all regions on the map at once. Understandably it would take some effort to make the model results line up near the geographical borders, we believe this would be valuable for users wanting to display all results as well. This would also be helpful should future models be expanded to include additional regions.
 
 \newpage
 
 ## References
 
-**Boreal Avian Modelling Centre**
+::: {#refs}
+:::
 
-- Organisation website: <https://borealbirds.github.io/>
+**Boreal Avian Modelling Centre Links**
+
+- Organization website: <https://borealbirds.github.io/>
 - Google Earth Engine viewer: <https://borealbirds-gee.projects.earthengine.app/view/landbirdmodels>
 - BAM Shiny explorer: <https://borealbirds.shinyapps.io/bam_landbird_explorer/>
 - BAMexploreR R package: <https://github.com/borealbirds/BAMexploreR>
 - Landbird Models V5: <https://github.com/borealbirds/LandbirdModelsV5>
 - BAM website repository: <https://github.com/borealbirds/borealbirds.github.io>
-- Cloud Optimized GeoTIF (COG): <https://cogeo.org/>
 - Coordinate Reference System EPSG lookup: <https://epsg.io/>
 
 **Capstone Project Working Repository**
 
--   UBC MDS Boreal-Birds: <https://github.com/UBC-MDS/Boreal-Birds>
--   README: <https://github.com/UBC-MDS/Boreal-Birds/blob/main/README.md>
--   UBC MDS MapTiler: <https://github.com/UBC-MDS/MapTiler>
--   README: <https://github.com/UBC-MDS/MapTiler/blob/main/README.md>
+- UBC MDS Boreal-Birds: <https://github.com/UBC-MDS/Boreal-Birds>
+- README: <https://github.com/UBC-MDS/Boreal-Birds/blob/main/README.md>
+- UBC MDS MapTiler: <https://github.com/UBC-MDS/MapTiler>
+- README: <https://github.com/UBC-MDS/MapTiler/blob/main/README.md>
