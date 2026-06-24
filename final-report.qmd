@@ -97,7 +97,7 @@ Because our entire raster collection lives on a remote DRAC server, **TiTiler** 
 
 The TiTiler application is built on the FastAPI framework [@fastapi_framework] wrapped in a Shiny application deployed on Posit Connect Cloud using Python.
 
-![TiTiler Workflow](img/titiler-workflow.png){#fig-titiler-workflow}
+![TiTiler Workflow](img/titiler-workflow.png){#fig-titiler-workflow width="60%"}
 
 As illustrated in @fig-titiler-workflow, the frontend dashboard, the DRAC cloud storage, and TiTiler work together in a synchronized pipeline to generate maps on demand:
 
