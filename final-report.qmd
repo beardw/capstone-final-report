@@ -56,7 +56,7 @@ The project uses three distinct types of data, each playing a specific role with
 * **Tabular Metadata (Excel):** Attributes containing Bird Conservation Region (BCR) definitions, species taxonomy, and overall population estimates. The dashboard reads this file to fill out user-interface filters and show summary statistics.
 * **Environmental Covariates (CSV):** Data showing how individual environmental factors affect population density estimates. These files run the dashboard's interactive charts, letting users explore what drives predicted bird abundance.
 
-All of these data assets are stored remotely on servers managed by the **Digital Research Alliance of Canada (DRAC)**.
+All of these data assets are stored remotely on servers managed by the **Digital Research Alliance of Canada (DRAC)** [@drac].
 
 \newpage
 
@@ -97,7 +97,7 @@ Because our entire raster collection lives on a remote DRAC server, **TiTiler** 
 
 The TiTiler application is built on the FastAPI framework [@fastapi_framework] wrapped in a Shiny application deployed on Posit Connect Cloud using Python.
 
-![TiTiler Workflow](img/titiler-workflow.png){#fig-titiler-workflow}
+![TiTiler Workflow](img/titiler-workflow.png){#fig-titiler-workflow width="60%"}
 
 As illustrated in @fig-titiler-workflow, the frontend dashboard, the DRAC cloud storage, and TiTiler work together in a synchronized pipeline to generate maps on demand:
 
@@ -122,7 +122,7 @@ Keeping with a simple and minimalist approach, we limited the number of filters 
 
 Species information is displayed through the toggle from *Map* to *Info* and selecting the *Info* tab from the 3 tab options. On a simple UI card, the scientific name, French name, species family, and species code are displayed in a clean and clear layout with links to 4 additional resources for further literature selectively directed towards the selected species.
 
-Additional links are to: [@eBird], [@NatureCounts], [Wikipedia](https://en.wikipedia.org/wiki/Bird), [@Xeno-Canto]
+Additional links are to: eBird [@eBird], NatureCounts [@NatureCounts], [Wikipedia](https://en.wikipedia.org/wiki/Bird), Xeno-Canto [@Xeno-Canto]
 
 - @fig-dashboard-info A basic UI card to display species names, species code, and links.
 
@@ -130,7 +130,7 @@ Additional links are to: [@eBird], [@NatureCounts], [Wikipedia](https://en.wikip
 
 #### Images and Sounds
 
-The images and sounds were obtained through APIs for conservation sites like [@Xeno-Canto] and [@iNaturalist]. Asset metadata values and tags were utilized to refine the desired image and sound parameters. The script for Image downloads attempted to retrieve 10 images per species tagged as a living specimen and aiming for 5 male and 5 female. As about \~3% of images were of poor quality or incorrectly tagged in the metadata manual review and intervention was required for the final quality control of the product. Some bird species are virtually impossible to sex in the field or from an image, so the images for these species were binned together in the *All* bucket.
+The images and sounds were obtained through APIs for conservation sites like Xeno-Canto [@Xeno-Canto] and iNaturalist [@iNaturalist]. Asset metadata values and tags were utilized to refine the desired image and sound parameters. The script for Image downloads attempted to retrieve 10 images per species tagged as a living specimen and aiming for 5 male and 5 female. As about \~3% of images were of poor quality or incorrectly tagged in the metadata manual review and intervention was required for the final quality control of the product. Some bird species are virtually impossible to sex in the field or from an image, so the images for these species were binned together in the *All* bucket.
 
 - @fig-dashboard-images-1 The *Images* tab of the Alder Flycatcher - which cannot be sexed
 
