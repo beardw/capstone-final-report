@@ -279,9 +279,9 @@ And lastly, and something that BAM is already aware of, relates to the regions. 
 - BAM website repository: <https://github.com/borealbirds/borealbirds.github.io>
 - Coordinate Reference System EPSG lookup: <https://epsg.io/>
 
-**Capstone Project Working Repository**
+**Capstone Project Transferred Repositories**
 
-- UBC MDS Boreal-Birds: <https://github.com/UBC-MDS/Boreal-Birds>
-- README: <https://github.com/UBC-MDS/Boreal-Birds/blob/main/README.md>
-- UBC MDS MapTiler: <https://github.com/UBC-MDS/MapTiler>
-- README: <https://github.com/UBC-MDS/MapTiler/blob/main/README.md>
+- Boreal-Birds: <https://github.com/borealbirds/Boreal-Birds>
+- README: <https://github.com/borealbirds/Boreal-Birds/blob/main/README.md>
+- MapTiler: <https://github.com/borealbirds/MapTiler>
+- README: <https://github.com/borealbirds/MapTiler/blob/main/README.md>
